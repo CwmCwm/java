@@ -24,20 +24,42 @@ public class 求解立方根 {
     public static void main(String[] args){
         Scanner scanner = new Scanner(System.in);
         double d = scanner.nextDouble();
+
+        //根据入参确定左右边界
         //0.1*0.1*0.1=0.0001
-        double l = 0.0, r = d;
-        while (r - l > 0.0001) {
-            double mid = (r + l) / 2;
+        double left = 0.0;
+        double right = 0.0;
+        if (d>1) {
+            right = d;
+        }
+        else if (d>0 && d<1) {
+            right = 1;
+        }
+        else if (d>-1 && d<0) {
+            left = -1;
+        }
+        else {
+            left = d;
+        }
+
+        //二分法遍历
+        while (right - left > 0.0001) {
+            double mid = (right + left) / 2;
             if(Math.pow(mid, 3) < d){
-                l = mid;
-            }else{
-                r = mid;
+                left = mid;
+            }
+            else {
+                right = mid;
             }
         }
-        if(Math.pow(Math.round(r),3) == d){ //216的开方 6.0，精益求精，5.9
-            System.out.printf("%.1f", (double) Math.round(r));
-        }else{
-            System.out.printf("%.1f", r);
+
+        //解决刚好有确定的立方根，因为用二分法逼近，所以会存在求的逼近值，而不是精确值
+        if (Math.pow(Math.round(right), 3) == d) {
+            //216的开方 6.0，精益求精，5.9
+            System.out.printf("%.1f", (double) Math.round(right));
+        }
+        else {
+            System.out.printf("%.1f", right);
         }
     }
 

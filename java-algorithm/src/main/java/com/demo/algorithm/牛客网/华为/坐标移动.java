@@ -52,25 +52,27 @@ public class 坐标移动 {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Map<Character, Integer> map = new HashMap<Character, Integer>();
-        while(scanner.hasNext()) {
-            String s = scanner.nextLine();
-            String[] sArray = s.split(";");
-            // 使用正则表达式校验输入合法
-            String res = "[ADWS]\\d{1}\\d?";
-            for (int i=0; i<sArray.length; i++) {
-                if (sArray[i].matches(res)) {
-                    map.put(sArray[i].charAt(0), map.getOrDefault(sArray[i].charAt(0), 0) + Integer.valueOf(sArray[i].substring(1)));
-                }
-            }
 
-            int x = 0 , y = 0;
-            x = x - map.get('A') + map.get('D');
-            y = y - map.get('S') + map.get('W');
-            System.out.println(x + "," + y);
-            map.clear();
+        //对map进行初始化
+        Map<Character, Integer> map = new HashMap<Character, Integer>();
+        map.put('A', 0);map.put('D', 0);
+        map.put('S', 0);map.put('W', 0);
+
+        String s = scanner.nextLine();
+        String[] sArray = s.split(";");
+        // 使用正则表达式校验输入合法
+        String res = "[ADWS]\\d{1}\\d?";
+        for (int i=0; i<sArray.length; i++) {
+            if (sArray[i].matches(res)) {
+                map.put(sArray[i].charAt(0), map.get(sArray[i].charAt(0)) + Integer.valueOf(sArray[i].substring(1)));
+            }
         }
-        scanner.close();
+
+        int x = 0 , y = 0;
+        x = x - map.get('A') + map.get('D');
+        y = y - map.get('S') + map.get('W');
+        System.out.println(x + "," + y);
+
     }
 
 

@@ -47,13 +47,13 @@ public class 统计每个月兔子的总数 {
     // 思路2：按月模拟兔子生产过程
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        while(scanner.hasNext()){
+
+        while (scanner.hasNext()) {
             int months = scanner.nextInt();
 
-            // month1是1个月大的兔子数量，month2是2个月大的兔子数量，month3是成熟的兔子数量
-            int month1 = 1;
-            int month2 = 0;
-            int month3 = 0;
+            int month1 = 1;//month1是1个月大的兔子数量
+            int month2 = 0;//month2是2个月大的兔子数量
+            int month3 = 0;//month3是成熟的兔子数量（3个月和超过3个月）
 
             // 这里上面 month1 = 1 已经初始化，即第一个月已经过了，下面循环从第2个月开始
             // 每过1个月就循环一次

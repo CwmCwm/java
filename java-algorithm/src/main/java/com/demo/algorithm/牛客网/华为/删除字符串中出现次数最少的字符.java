@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 /**
  题目描述
@@ -26,12 +27,13 @@ import java.util.Map;
  * */
 public class 删除字符串中出现次数最少的字符 {
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        String input;
-        while ((input=bufferedReader.readLine()) != null ) {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        while (sc.hasNext()) {
+            String input = sc.nextLine();
             char[] chars = input.toCharArray();
-            // 统计
+            // 统计字符出现的次数
             Map<Character, Integer> hashMap = new HashMap<>();
             for (char x : chars) {
                 hashMap.put(x, hashMap.getOrDefault(x, 0) + 1);

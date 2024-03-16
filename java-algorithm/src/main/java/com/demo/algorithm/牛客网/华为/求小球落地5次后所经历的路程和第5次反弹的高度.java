@@ -26,19 +26,23 @@ public class 求小球落地5次后所经历的路程和第5次反弹的高度 {
 
     public static void main(String[] args){
         Scanner scanner = new Scanner(System.in);
-        while(scanner.hasNext()){
+
+        while (scanner.hasNext()) {
             int initHeight = scanner.nextInt();
-            // sum是经历的路程   temp是上一次的高度
-            double sum = 0;
-            double temp = initHeight;
-            for(int i=0; i<5; i++){
-                sum += temp * 2;
+            int reboundNum = 5;
+
+            //sum是经历的路程，temp是上一次的高度
+            double sum = 0;            //sum是第n次落地经历的路程（注意是第n次落地）
+            double temp = initHeight;  //temp是第n次反弹的高度（注意是第n次反弹，必定在第n次落地后面）
+            for (int i=0; i<reboundNum; i++) {
+                sum = sum + temp * 2;
                 temp = temp / 2;
             }
-            //第一次按它先弹上来再掉下去算的，要减掉第一次弹上来的路程
-            sum -= initHeight;
-            System.out.printf("%.6f\n",sum);
-            System.out.printf("%.6f\n",temp);
+            //减去一开始只有下落的初始高度，但没有弹起的高度（就是第0次只有下落过程，没弹起过程）
+            sum = sum - initHeight;
+
+            System.out.println(String.valueOf(sum));
+            System.out.println(String.valueOf(temp));
         }
     }
 

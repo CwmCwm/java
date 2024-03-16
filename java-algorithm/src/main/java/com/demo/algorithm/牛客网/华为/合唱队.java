@@ -40,7 +40,7 @@ public class 合唱队 {
         while(scan.hasNext()){
             int total = scan.nextInt();
             int[] arr = new int[total+1];
-            for(int i = 1 ; i <= total ; i++){
+            for(int i=1 ; i<=total ; i++){
                 arr[i] = scan.nextInt();
             }
             int[] l = left(arr);
@@ -55,6 +55,8 @@ public class 合唱队 {
 
         }
     }
+
+
     //186 186 150 200 160 130 197 200
     // 1   1   1   2   2   1   3   4
     //LIs:上升子序列长度
@@ -64,11 +66,11 @@ public class 合唱队 {
     // arr[j+1] < arr[i]
     // f(i) = f(j+1)+1
     //最长LIS: max{ f(j)+1,f(j+1)+1 }
-    public static  int[]  left(int[] arr){
+    public static int[] left(int[] arr){
         int[] left = new int[arr.length];
-        for(int i =1 ; i < arr.length ; i++){
+        for(int i=1; i<arr.length; i++){
             left[i] = 1;
-            for(int j = 1 ; j < i ;j++){
+            for(int j=1; j<i; j++){
                 if(arr[j] < arr[i]){
                     left[i] = Math.max(left[i],left[j]+1);
                 }
@@ -76,12 +78,13 @@ public class 合唱队 {
         }
         return left;
     }
+
     //186 186 150 200 160 130 197 200
-    public static  int[]  right(int[] arr){
+    public static int[] right(int[] arr){
         int[] right= new int[arr.length];
-        for(int i =arr.length-1 ; i > 0; i--){
+        for(int i =arr.length-1; i>0; i--){
             right[i] = 1;
-            for(int j = arr.length-1; j >i ;j--){
+            for(int j=arr.length-1; j>i; j--){
                 if(arr[j] < arr[i]){
                     right[i] = Math.max(right[i],right[j]+1);
                 }

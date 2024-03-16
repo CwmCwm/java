@@ -51,23 +51,26 @@ public class ThreadWaitAndNotifyMain {
 
         public synchronized String getTask() throws InterruptedException {
             while (this.queue.isEmpty()) {
-                System.out.println(Thread.currentThread().getName() + "----1111");
-                this.wait();
+                System.out.println("队列为空，当前线程" + Thread.currentThread().getName() + "----进入阻塞");
+                //this.wait();
+                this.wait(10000);//该线程超过10000毫秒就不再阻塞，而是重新就绪
             }
             return this.queue.remove();
         }
     }
 
+    //AThread线程负责往队列新增任务
     private static class AThread extends Thread {
         public TaskQueue taskQueue = null;
         @Override
         public void run() {
-            String s = "任务" + String.valueOf(System.currentTimeMillis());
+            String s = "任务" + System.currentTimeMillis();
             taskQueue.addTask(s);
-            System.out.println(getName() + "----经数据 " + s + " 放入队列");
+            System.out.println(getName() + "----将 " + s + " 放入队列");
         }
     }
 
+    //BThread线程负责从队列获取任务
     private static class BThread extends Thread {
         public TaskQueue taskQueue = null;
         @Override
@@ -75,10 +78,11 @@ public class ThreadWaitAndNotifyMain {
             String s = null;
             try {
                 s = taskQueue.getTask();
-            } catch (InterruptedException e) {
+            }
+            catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println(getName() + "----从队列中拿出数据 " + s);
+            System.out.println(getName() + "----将 " + s + " 拿出队列");
         }
     }
 
@@ -105,7 +109,7 @@ public class ThreadWaitAndNotifyMain {
         bThread.setName("bThread");
         bThread.taskQueue = taskQueue;
         bThread.start();
-        Thread.sleep(100);
+        Thread.sleep(20000);
         aThread.start();
     }
 

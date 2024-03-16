@@ -40,43 +40,40 @@ import java.util.*;
 public class 简单错误记录 {
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
         Queue<String> queue = new LinkedList<>();
         Map<String, Integer> countMap = new HashMap<>();
 
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        String string;
-        while ((string = bufferedReader.readLine()) != null && !string.equals("")) {
-            String[] array = string.split(" ");
-            String fileName = fileName(array[0]);
-            String wrongLine = array[1];
-            String index = fileName + " " + wrongLine;
-            // 错误记录-计数
-            countMap.put(index, countMap.getOrDefault(index, 0)+1);
-            if (!queue.contains(index)) {
-                queue.add(index);
+        while (sc.hasNextLine()) {
+            String line = sc.nextLine();
+            String[] ns = line.split(" ");
+            String[] ls = ns[0].split("\\\\");
+            String lastName = ls[ls.length-1];
+            lastName = lastName.length() > 16 ? lastName.substring(lastName.length()-16) : lastName;
+            String key = lastName + " " + Integer.valueOf(ns[1]);
+
+            //如果map还没有记录该key，就添加key，计数=1
+            if (countMap.get(key) == null) {
+                countMap.put(key, 1);
+                if (queue.size() == 8) {
+                    queue.poll();
+                }
+                queue.add(key);
+            }
+            else {
+                countMap.put(key, countMap.get(key) + 1);
             }
         }
 
-        while (queue.size() > 0) {
-            String index = queue.poll();
-            if (queue.size() <= 7) {
-                System.out.println(index + " " + countMap.get(index));
-            }
+        for(String s : queue) {
+            System.out.println(s + " " + countMap.get(s));
         }
 
     }
 
 
-    // 2、 超过16个字符的文件名称，只记录文件的最后有效16个字符；
-    public static String fileName(String filePath) {
-        int lastIndex = filePath.lastIndexOf("\\");
-        String tmp = filePath.substring(lastIndex+1);
-        if (tmp.length() > 16) {
-            return tmp.substring(tmp.length()-16);
-        }
-        return tmp;
-    }
 
 
 

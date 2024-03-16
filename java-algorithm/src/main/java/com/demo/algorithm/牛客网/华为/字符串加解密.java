@@ -55,82 +55,92 @@ import java.util.Scanner;
 public class 字符串加解密 {
 
 
-    public static void main(String []args) throws Exception{
+    public static void main(String []args) {
         Scanner scanner =new Scanner(System.in);
 
         while (scanner.hasNext()) {
-            String jiami = scanner.next();
-            String jiemi = scanner.next();
-            char[] jiamiReuslt = new char[jiami.length()];
-            char[] jiemiReuslt = new char[jiemi.length()];
+            String jiami = scanner.nextLine();
+            String jiemi = scanner.nextLine();
 
-            Encrypt(jiami.toCharArray(), jiamiReuslt);
-            unEncrypt(jiemi.toCharArray(), jiemiReuslt);
-
-            System.out.println(new String(jiamiReuslt));
-            System.out.println(new String(jiemiReuslt));
+            System.out.println(new String(encrypt(jiami.toCharArray())));
+            System.out.println(new String(unEncrypt(jiemi.toCharArray())));
         }
-
 
     }
 
 
+    public int a_A = 'a' - 'A';//不记得偏移量是32，那就计算出来
 
-    public static void Encrypt (char aucPassword[], char aucResult[]) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i=0; i<aucPassword.length; i++) {
-            if(aucPassword[i]>='a' && aucPassword[i]<='z') {
-                if(aucPassword[i]=='z')
-                    stringBuilder.append('A');
-                else
-                    stringBuilder.append((char)(aucPassword[i]-32+1));
+    //加密
+    public static char[] encrypt (char source[]) {
+        //target用于存放加密后的字符串
+        char[] target = new char[source.length];
+
+        //遍历source中每个字符，然后进行加密
+        for (int i=0; i<source.length; i++) {
+            if (source[i]>='a' && source[i]<='z') {
+                if (source[i]=='z') {
+                    target[i] = 'A';
+                }
+                else {
+                    target[i] = (char)(source[i]-32+1);
+                }
+
             }
-            else if(aucPassword[i]>='A' && aucPassword[i]<='Z') {
-                if(aucPassword[i]=='Z')
-                    stringBuilder.append('a');
-                else
-                    stringBuilder.append((char)(aucPassword[i]+32+1));
+            else if(source[i]>='A' && source[i]<='Z') {
+                if (source[i]=='Z') {
+                    target[i] = 'a';
+                }
+                else {
+                    target[i] = (char)(source[i]+32+1);
+                }
             }
-            else if(aucPassword[i]>='0' && aucPassword[i]<='9') {
-                if(aucPassword[i]=='9')
-                    stringBuilder.append('0');
-                else
-                    stringBuilder.append(aucPassword[i]-'0'+1);
+            else if(source[i]>='0' && source[i]<='9') {
+                if(source[i]=='9') {
+                    target[i] = '0';
+                }
+                else {
+                    target[i] = (char)(source[i]+1);
+                }
             }
         }
 
-        for (int i=0; i<stringBuilder.length(); i++) {
-            aucResult[i] = stringBuilder.charAt(i);
-        }
+        return target;
     }
 
+    //解密
+    public static char[] unEncrypt (char source[]) {
+        //target用于存放解密后的字符串
+        char[] target = new char[source.length];
 
-    public static void unEncrypt (char result[], char password[]) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for(int i=0; i<result.length; i++) {
-            if(result[i]>='a' && result[i]<='z') {
-                if(result[i]=='a')
-                    stringBuilder.append('Z');
-                else
-                    stringBuilder.append((char)(result[i]-32-1));
+        for(int i=0; i<source.length; i++) {
+            if (source[i]>='a' && source[i]<='z') {
+                if (source[i]=='a') {
+                    target[i] = 'Z';
+                }
+                else {
+                    target[i] = (char)(source[i]-32-1);
+                }
             }
-            else if(result[i]>='A' && result[i]<='Z') {
-                if(result[i]=='A')
-                    stringBuilder.append('z');
-                else
-                    stringBuilder.append((char)(result[i]+32-1));
+            else if (source[i]>='A' && source[i]<='Z') {
+                if(source[i]=='A') {
+                    target[i] = 'z';
+                }
+                else {
+                    target[i] = (char)(source[i]+32-1);
+                }
             }
-            else if(result[i]>='0' && result[i]<='9') {
-                if(result[i]=='0')
-                    stringBuilder.append('9');
-                else
-                    stringBuilder.append(result[i]-'0'-1);
+            else if (source[i]>='0' && source[i]<='9') {
+                if (source[i]=='0') {
+                    target[i] = '9';
+                }
+                else {
+                    target[i] = (char)(source[i]-1);
+                }
             }
         }
 
-        for (int i=0; i<stringBuilder.length(); i++) {
-            password[i] = stringBuilder.charAt(i);
-        }
+        return target;
     }
 
 

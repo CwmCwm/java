@@ -26,7 +26,7 @@ import java.util.Scanner;
  student a am I
 
  * */
-public class 中级_单词倒排 {
+public class 单词倒排 {
 
 
 

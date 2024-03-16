@@ -2,12 +2,12 @@ package com.demo.grammar;
 
 
 /**
- java数组的写法
+ 父类
  * */
 public class ExtendsParent {
 
     static {
-        System.out.println("ExtendsParent类的static代码块");
+        System.out.println("ExtendsParent类的static代码块，类初次加载时会执行一次");
     }
 
     {

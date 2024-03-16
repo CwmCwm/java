@@ -1,6 +1,7 @@
 package com.demo.algorithm.牛客网.华为;
 
 
+import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -45,6 +46,34 @@ public class 字符个数统计 {
             System.out.println(count);
         }
 
+    }
+
+    //算法1，使用BitSet
+    public Integer function1(String line) {
+        //总共有128个字符。字需要用128位
+        BitSet bitSet = new BitSet(128);
+        for (char c : line.toCharArray()) {
+            //判断字符c是否已出现
+            if (!bitSet.get(c)) {
+                //未出现就设置为已出现
+                bitSet.set(c);
+            }
+        }
+        //统计有多少字符已出现过
+        return bitSet.cardinality();
+    }
+
+    //算法1，使用Set
+    public Integer function2(String string) {
+        Set<Character> set = new HashSet<>();
+
+        for (int i=0; i<string.length(); i++) {
+            if (!set.contains(string.charAt(i))) {
+                set.add(string.charAt(i));
+            }
+        }
+
+        return set.size();
     }
 
 }

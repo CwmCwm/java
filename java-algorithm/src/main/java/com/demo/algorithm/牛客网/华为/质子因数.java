@@ -35,26 +35,33 @@ public class 质子因数 {
         Scanner scanner = new Scanner(System.in);
         while(scanner.hasNextLong()){
             long num = scanner.nextLong();
-            System.out.println(getResult(num));
+            System.out.println(getResult1(num));
         }
     }
 
 
+
+    // 算法1
     // 我只会小学学的 “短除分解法”
-    public static String getResult(long num){
-        // 从最小的质数2 开始除
-        int pom = 2;
+    public static String getResult1(long num){
+        // 从最小的质数2开始除，除到没法整除了，在将被除数加1后作为被除数
+        // 之后是质数3
+        // 然后是4，2都没法整除了，那么4只是走个循环而已，肯定没法被整除
+        // 同理后面的质数才有可能被整除，如5,7,11。  像6,8,9这些非质数已经被前面的质数整除了是不会做整除的
+        // 然后就是优化了，判断整除的边界
+        long num_2 = (long) (num/2);        //将整除边界缩少一半
+        long num_3 = (long) Math.sqrt(num); //将整除边界缩少到平方根，不知道这个数学原理TODO
         StringBuilder output = new StringBuilder();
-        while(num >= pom){
-            if (num % pom == 0){
-                num = num / pom;
+        for (long pom=2; pom<=num_3; ++pom) {
+            while (num % pom == 0) {
                 output.append(pom).append(" ");
-            }
-            else {
-                pom++;
+                num /= pom;
             }
         }
-        return output.toString();
+
+        //这里num到整除边界后已经被完全分解，那么num就是1
+        //这里num到整除边界后还没有被完全分解，那么num就是剩余的那个大质因数
+        return num==1 ? output.toString() : output.append(num).toString();
     }
 
 }

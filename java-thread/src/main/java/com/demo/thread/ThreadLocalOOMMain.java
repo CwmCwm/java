@@ -73,8 +73,10 @@ public class ThreadLocalOOMMain {
                 public void run() {
                     localVariable.set(new LocalVariable());
                     System.out.println("use local varaible");
+                    LocalVariable localVariable1 = localVariable.get();
+                    System.out.println(localVariable1.a);
 
-                    // 使用 localVariable.remove(); 后堆空间的情况就和上面的不使用ThreadLocal 的一样了
+                    // 使用 localVariable.remove(); 后，堆空间的情况就和上面的不使用ThreadLocal 的一样了
                     // 业务代码主动清除上面存在ThreadLocal内的 LocalVariable实例，业务代码也应该知道该LocalVariable实例的生命周期，所以推荐这样写
                     // remove方法会执行 expungeStaleEntry方法 去清除Entry，虽然调用 ThreadLocal.get和set方法也会执行 expungeStaleEntry方法，但是触发的时间点不同啊
                     localVariable.remove();

@@ -35,30 +35,30 @@ import java.util.Scanner;
 public class 汽水瓶 {
 
 
-    public static void main(String[] args) throws IOException {
-        Scanner scanner = new Scanner(System.in);
-        int n;
-        while(scanner.hasNext())
-        {
-            n = scanner.nextInt();
-            System.out.println(howManyBottles(n));
-        }
-    }
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        while (in.hasNextInt()) {
+            int emptyBottle = in.nextInt();
+            //本题存在多组输入。输入的 0 表示输入结束，并不用输出结果。
+            if (emptyBottle == 0) {
+                continue;
+            }
 
+            int drinkCount = 0;
 
-    // 喝几瓶的算法
-    public static int howManyBottles(int emptyBottles) {
-        int count = emptyBottles/3;
-        int remainEmptyBottles = emptyBottles%3 + count;
-        while (remainEmptyBottles > 2) {
-            int newBottles = remainEmptyBottles/3;
-            count = count + newBottles;
-            remainEmptyBottles = remainEmptyBottles%3 + newBottles;
+            //3个空瓶换1瓶，就是每次换完喝完后-2个空瓶
+            while (emptyBottle >= 3) {
+                emptyBottle = emptyBottle - 2;
+                drinkCount++;
+            }
+
+            //最后剩下2个空瓶就可以向老板借1个空瓶，喝完后还回去
+            if (emptyBottle == 2) {
+                drinkCount++;
+            }
+
+            System.out.println(drinkCount);
         }
-        if (remainEmptyBottles == 2) {
-            count++;
-        }
-        return count;
     }
 
 

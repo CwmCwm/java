@@ -46,43 +46,45 @@ import java.util.Scanner;
  思路是利用有序的LinkedHashSet集合，先把密钥添加进去，再把剩下的字符添加进去形成完整的密钥；
  再根据要加密的字符串字符一个个取出拼接输出，ps：不要忘了大小写和空格
 
- TODO 读不懂题意？？
-
  * */
 public class 字符串加密 {
 
     public static void main(String args[]) {
         Scanner sc = new Scanner(System.in);
-        while (sc.hasNext()) {
-            String key = sc.nextLine();
-            String data = sc.nextLine();
 
-            // list 升序存 a至z
-            String s2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            String s1 = s2.toLowerCase();
-            List<String> list = new ArrayList<>();
-            for (int i = 0; i < s1.length(); i++) {
-                list.add(s1.charAt(i)+"");
+        while (sc.hasNext()) {
+            String key = sc.nextLine();  //密钥
+            String data = sc.nextLine(); //要加密的数据
+
+            //listLow初始为升序的a至z的字母表，后面结合密钥的顺序，再改写成新的字母表
+            String strUp  = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            String strLow = "abcdefghijklmnopqrstuvwxyz"; //原字母表（升序的a至z）
+            List<String> listLow = new ArrayList<>();     //新字母表（密钥结合原字母表生成的新的字母表）
+            for (int i=0; i<strLow.length(); i++) {
+                listLow.add(String.valueOf(strLow.charAt(i)));
             }
 
-            // 如果 str
-            String str= "";
-            for (int i = 0; i < key.length(); i++) {
-                if (!(str.contains(key.charAt(i)+""))) {
-                    str += key.charAt(i);
+            //keyStr中字母的去重，按原顺序排序
+            String keyStr = "";
+            for (int i=0; i<key.length(); i++) {
+                if (!(keyStr.contains(String.valueOf(key.charAt(i))))) {
+                    keyStr = keyStr + key.charAt(i);
                 }
             }
 
-            //2.删一个添一个
-            for (int i = 0; i < str.length(); i++) {
-                list.remove(str.charAt(i)+"");
-                list.add(i, str.charAt(i)+"");
+            //结合密钥的顺序，改写listLow成新的字母表
+            for (int i=0; i<keyStr.length(); i++) {
+                listLow.remove(String.valueOf(keyStr.charAt(i)));
+                listLow.add(i, String.valueOf(keyStr.charAt(i)));//会往后顶，而不是替换
             }
 
-            for (int i = 0; i < data.length(); i++) {
-                System.out.print(list.get(s1.indexOf(data.charAt(i))));
+            //要加密的数据
+            StringBuilder sb = new StringBuilder();
+            for (int i=0; i<data.length(); i++) {
+                sb.append(listLow.get(strLow.indexOf(data.charAt(i))));
             }
-            System.out.println();
+
+            System.out.println(sb.toString());
 
         }
         sc.close();

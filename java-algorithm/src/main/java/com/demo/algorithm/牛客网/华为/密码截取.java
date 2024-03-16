@@ -25,33 +25,39 @@ import java.util.Scanner;
  思路：对称，要么有一个字符串为中心的对称（如 121 ，其中2就是中心）   要么没有中心对称（如 1221  ，就没有中心啊）
 
  * */
-public class 中级_字符串运用_密码截取 {
+public class 密码截取 {
 
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
         while (scanner.hasNextLine()) {
             String str = scanner.nextLine();
-            int max=0;
-            char[] arr=str.toCharArray();
-            for(int i=1;i<arr.length;i++){
-                // 没有中心对称（如 1221  ，就没有中心啊）
-                int left=i-1;
-                int right=i;
-                while(left>=0 && right<arr.length && arr[left]==arr[right]){
-                    if(right-left+1>max){
-                        max=right-left+1;
+            int max = 0;
+            char[] arr = str.toCharArray();
+
+            //i是数组的下标，遍历所有下标位置
+            //以这个下标向左右两边对称比较，
+            //一种是没有中心的对称
+            //一种是以一个字符为中心的对称
+            for (int i=1; i<arr.length; i++) {
+                //没有中心对称（如 1221  ，就没有中心啊）
+                int left = i-1;
+                int right = i;
+                while (left>=0 && right<arr.length && arr[left]==arr[right]) {
+                    if (right-left+1 > max) {
+                        max = right-left+1;
                     }
                     left--;
                     right++;
                 }
 
-                // 有一个字符串为中心的对称（如 121 ，其中2就是中心）
-                left=i-1;
-                right=i+1;
-                while(left>=0 && right<arr.length && arr[left]==arr[right]){
-                    if(right-left+1>max){
-                        max=right-left+1;
+                //有一个字符串为中心的对称（如 121 ，其中2就是中心）
+                left = i-1;
+                right = i+1;
+                while (left>=0 && right<arr.length && arr[left]==arr[right]) {
+                    if (right-left+1>max) {
+                        max = right-left+1;
                     }
                     left--;
                     right++;

@@ -3,7 +3,7 @@ package com.demo.algorithm.牛客网.华为;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  题目描述
@@ -36,32 +36,89 @@ import java.util.Scanner;
  * */
 public class 字符串排序 {
 
-    public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String str;
-        while ((str = br.readLine()) != null) {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int a_A = 'a' - 'A'; //大写A在前，小写a在后，这样就是小写字母和大写字母的偏移量
+
+        while (sc.hasNext()) {
+            String str = sc.nextLine();
             char[] arr = str.toCharArray();
             StringBuilder builder = new StringBuilder();
-            // 英文字母从 A 到 Z 排列，不区分大小写：26 个
-            for (int i = 0; i < 26; i++) {
+            int length = str.length();
+
+            // 英文字母从A到Z排列，不区分大小写：26 个
+            // 先将字符串中的所有字母按从A到Z排列（不区分大小写），放入StringBuilder中
+            for (int i=0; i<26; i++) {
                 char c = (char) ('A' + i);
                 // 遍历字符串
-                for (int j = 0, length = str.length(); j < length; j++) {
+                for (int j=0; j<length; j++) {
                     // 不区分大小写
-                    if (c == arr[j] || c == arr[j] - 'a' + 'A') {
+                    if (c==arr[j] || c==arr[j] - a_A) {
                         builder.append(arr[j]);
                     }
                 }
             }
+
             // 非英文字母的其它字符保持原来的位置
-            for (int i = 0, length = str.length(); i < length; i++) {
+            // 然后遍历原字符串，在非英文字母的其它字符中的下标位置在StringBuilder重新插入
+            for (int i=0; i<length; i++) {
                 if (!((arr[i] >= 'A' && arr[i] <= 'Z') || (arr[i] >= 'a' && arr[i] <= 'z'))) {
                     builder.insert(i, arr[i]);
                 }
             }
+
             System.out.println(builder.toString());
         }
 
+    }
+
+    // 算法1: 使用Arrays.sort
+    public static void withArraysAPI()  {
+        Scanner in = new Scanner(System.in);
+        int num = Integer.parseInt(in.nextLine());
+        String[] ss = new String[num];
+        for (int i=0; i<num; i++) {
+            ss[i] = in.nextLine();
+        }
+        Arrays.sort(ss);
+
+        for(String str : ss) {
+            System.out.println(str);
+        }
+    }
+
+    // 算法2: 使用list并自己实现Comparator, 比较能体现算法的思路
+    public static void withComparator() {
+        Scanner in = new Scanner(System.in);
+        int num = Integer.parseInt(in.nextLine());
+        List<String> list = new ArrayList<>();
+        String s = "";
+        for (int i=0; i<num; i++) {
+            list.add(in.nextLine());
+        }
+
+        list.sort(new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                int i = 0;//第几位，字符串的下标
+                while (i < s1.length() && i < s2.length()) {
+                    if (s1.charAt(i) != s2.charAt(i)) {
+                        return (s1.charAt(i) > s2.charAt(i)) ? 1 : -1;
+                    }
+                    i++;
+                }
+                if (s1.length() == s2.length()) {
+                    return 0;
+                }
+                else {
+                    return (s1.length() > s2.length()) ? 1 : -1;
+                }
+            }
+        });
+
+        for(String str : list) {
+            System.out.println(str);
+        }
     }
 
 

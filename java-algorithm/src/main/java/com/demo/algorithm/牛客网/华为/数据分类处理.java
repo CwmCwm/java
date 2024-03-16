@@ -41,10 +41,18 @@ import java.util.*;
 
  示例1
  输入
- 15 123 456 786 453 46 7 5 3 665 453456 745 456 786 453 123
- 5 6 3 6 3 0
+ 15 123 456 786 453 46 7 5 3 665 453456 745 456 786 453 123                             序列I
+ 5 6 3 6 3 0                                                                            序列R
  输出
  30 3 6 0 123 3 453 7 3 9 453456 13 453 14 123 6 7 1 456 2 786 4 46 8 665 9 453456 11 456 12 786
+ 说明
+ 将序列R：5,6,3,6,3,0（第一个5表明后续有5个整数）排序去重后，可得0,3,6。
+ 第1位的"30"表示后面共30项
+ 序列I没有包含0的元素。所以不会输出0的相关项。
+ 序列I中包含3的元素有：I[0]的值为123、I[3]的值为453、I[7]的值为3、I[9]的值为453456、I[13]的值为453、I[14]的值为123。
+ 第2位的"3"就是R的元素3，"6"是3在序列I中匹配到的个数，"0 123 3 453 7 3 9 453456 13 453 14 123"就是匹配到的在序列I中下标和值
+ 序列I中包含6的元素有：I[1]的值为456、I[2]的值为786、I[4]的值为46、I[8]的值为665、I[9]的值为453456、I[11]的值为456、I[12]的值为786。
+ "6 7 1 456 2 786 4 46 8 665 9 453456 11 456 12 786"同上
 
 
  TODO  题意读起来太累了
@@ -56,38 +64,45 @@ public class 数据分类处理 {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        while (sc.hasNext()){
-            int rn = sc.nextInt();
-            String[] st = new String[rn];
-            for(int i=0;i<rn;i++){
-                st[i] =sc.next();
+        while (sc.hasNext()) {
+            //获取并存储I序列
+            int INum = sc.nextInt();
+            String[] IArray = new String[INum];
+            for (int i=0; i<INum; i++) {
+                IArray[i] = sc.next();
             }
-            int jn = sc.nextInt();
-            TreeSet<Integer> set = new TreeSet<Integer>();
-            for(int i=0;i< jn;i++){
-                set.add(sc.nextInt());
+
+            //获取并存储R序列（去重排序）
+            int RNum = sc.nextInt();
+            TreeSet<Integer> RSet = new TreeSet<Integer>();
+            for (int i=0; i<RNum; i++) {
+                RSet.add(sc.nextInt());
             }
-            StringBuffer str = new StringBuffer();
-            Iterator<Integer> iterator = set.iterator();
-            while (iterator.hasNext()){
-                String e = iterator.next().toString();
-                str.append(getRes(e,st));
+
+
+            StringBuffer stringBuffer = new StringBuffer();
+            Iterator<Integer> iterator = RSet.iterator();
+            while (iterator.hasNext()) {
+                String RItem = iterator.next().toString();
+                stringBuffer.append(getRes(RItem, IArray));
             }
-            System.out.println(str.toString().split(" ").length+" "+str);
+            System.out.println(stringBuffer.toString().split(" ").length + " " + stringBuffer);
         }
     }
-    public static StringBuffer getRes(String e,String[] st){
+
+    public static StringBuffer getRes(String RItem, String[] IArray) {
         StringBuffer res = new StringBuffer();
-        LinkedHashMap<Integer,String> map = new LinkedHashMap<Integer, String>();
-        for(int i=0;i<st.length;i++){
-            if(st[i].contains(e)){
-                map.put(i,st[i]);
+        LinkedHashMap<Integer, String> map = new LinkedHashMap<Integer, String>();
+        for (int IIndex=0; IIndex<IArray.length; IIndex++) {
+            if (IArray[IIndex].contains(RItem)) {
+                map.put(IIndex, IArray[IIndex]);
             }
         }
-        if(map.size()>0)
-            res.append(e+" "+map.size()+" ");
-        for(Map.Entry entry : map.entrySet()){
-            res.append(entry.getKey()+" "+entry.getValue()+" ");
+        if (map.size()>0) {
+            res.append(RItem + " " + map.size() + " ");
+        }
+        for (Map.Entry entry : map.entrySet()) {
+            res.append(entry.getKey() + " " + entry.getValue() + " ");
         }
         return res;
     }

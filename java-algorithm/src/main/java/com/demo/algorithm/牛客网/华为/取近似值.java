@@ -36,15 +36,9 @@ public class 取近似值 {
         }
     }
 
-    // 十分位的四舍五入
-    // 强转会舍弃
+    // 先加0.5，然后强转舍去小数部分
     public static int rounding(double num) {
-        int tmp = (int) num;
-        if (num-tmp >= 0.5) {
-            return tmp + 1;
-        } else {
-            return tmp;
-        }
+        return (int)(num + 0.5);
     }
 
 }

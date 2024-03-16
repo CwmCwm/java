@@ -48,23 +48,37 @@ import java.util.*;
  4 8
  7
 
+ 样例输入
+ 5
+ 样例输出
+ 1 3 6 10 15      (+2, +3, +4, +5 ...)
+ 2 5 9 14         (+3, +4, +5)
+ 4 8 13           (+4, +5)
+ 7 12             (+5)
+ 11
+ 竖向 (+1, +2, +3, +4)
+
+
 思路：找规律
 
  * */
 public class 蛇形矩阵 {
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
-        while(sc.hasNext()){
+
+        while (sc.hasNext()) {
             int n = sc.nextInt();
             StringBuffer str = new StringBuffer();
-            int a = 1;
-            int b = 0;
-            for(int i=0; i<n; i++){
-                a = a +i;
-                b = a;
-                for(int j=0; j<n-i; j++){
-                    str.append(b+" ");
-                    b = b+ j+i+2;
+            int y1 = 1;//y轴上的第1位，即每行的第1位
+            int b = 0;  //一行里面向右移的每一位
+
+            //i是竖向的计数，j是横向的计数
+            for (int i=0; i<n; i++) {
+                y1 = y1 + i;
+                b = y1;//重置后再加
+                for (int j=0; j<n-i; j++) {
+                    str.append(b + " ");
+                    b = b + j+i+2;
                 }
                 System.out.println(str.toString().trim());
                 str = new StringBuffer();

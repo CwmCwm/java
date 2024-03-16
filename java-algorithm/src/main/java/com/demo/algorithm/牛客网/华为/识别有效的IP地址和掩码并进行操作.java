@@ -53,117 +53,119 @@ public class 识别有效的IP地址和掩码并进行操作 {
 
 
     public static void main(String[] args) {
-        //             A  B  C  D  E  illegal private
-        int[] count = {0, 0, 0, 0, 0, 0, 0};
+        Scanner sc = new Scanner(System.in);
+        int ANum = 0;
+        int BNum = 0;
+        int CNum = 0;
+        int DNum = 0;
+        int ENum = 0;
+        int errorNum = 0;
+        int privateNum = 0;
 
-        Scanner scanner = new Scanner(System.in);
+        while (sc.hasNextLine()) {
+            String str = sc.nextLine();
+            String[] strArr = str.split("~");
 
-
-        while (scanner.hasNext()) {
-            String str = scanner.nextLine();
-            String[] strings = str.split("~");
-            String ipStr = strings[0];
-            String codeStr = strings[1];
-
-            String[] ipCharStr = ipStr.split("\\.");
-            // 判断ip是否为空或者首字符是否等于0
-            Boolean isTrue = true;
-            if (ipCharStr[0].equals("0")) {
-                // 1. 类似于【0.*.*.*】和【127.*.*.*】的IP地址不属于上述输入的任意一类，也不属于不合法ip地址，计数时可以忽略
+            //ip的第1段
+            int ipFirst = getIpSeg(strArr[0], 0);
+            //类似于【0.*.*.*】和【127.*.*.*】的IP地址不属于上述输入的任意一类，也不属于不合法ip地址，计数时请忽略
+            if (ipFirst == 0 || ipFirst == 127) {
                 continue;
-            } else {
-                for (int i = 0; i < ipCharStr.length; i++) {
-                    if (ipCharStr[i].length() <= 0) {
-                        isTrue = false;
-                    }
-                }
             }
 
-            //如果ip地址正确判断掩码是否正确
-            if (isTrue) {
-                //判断掩码是否正确
-                int[] codeRange = {254, 252, 248, 240, 224, 192, 128, 0};
-                List<Integer> list = Arrays.stream(codeRange).boxed().collect(Collectors.toList());//int数组转化为list
-                String[] codeCharStr = codeStr.split("\\.");
-
-                //判断是否前面全为1后面全为0
-                if ("255".equals(codeCharStr[0])) {
-                    if ("255".equals(codeCharStr[1])) {
-                        if ("255".equals(codeCharStr[2])) {
-                            if ("255".equals(codeCharStr[3])) {
-                                isTrue = false;
-                            } else if (list.contains(Integer.parseInt(codeCharStr[3]))) {
-                                isTrue = true;
-                            } else
-                                isTrue = false;
-                        } else if (list.contains(Integer.parseInt(codeCharStr[2]))) {
-                            if (Integer.parseInt(codeCharStr[3]) == 0)
-                                isTrue = true;
-                            else
-                                isTrue = false;
-                        } else
-                            isTrue = false;
-                    } else if (list.contains(Integer.parseInt(codeCharStr[1]))) {
-                        if (Integer.parseInt(codeCharStr[2]) == 0 && Integer.parseInt(codeCharStr[3]) == 0)
-                            isTrue = true;
-                        else
-                            isTrue = false;
-                    } else
-                        isTrue = false;
-                } else if (list.contains(Integer.parseInt(codeCharStr[0]))) {
-                    if (Integer.parseInt(codeCharStr[0]) == 0) {
-                        isTrue = false;
-                    } else {
-                        if (Integer.parseInt(codeCharStr[1]) == 0 && Integer.parseInt(codeCharStr[2]) == 0 && Integer.parseInt(codeCharStr[3]) == 0)
-                            isTrue = true;
-                        else
-                            isTrue = false;
-                    }
-
-                } else
-                    isTrue = false;
+            //ip错误
+            if (!ipIsLegal(strArr[0])) {
+                errorNum++;
+                continue;
             }
 
-            //调用方法判断地址范围和私网ip
-            if (isTrue) {
-                int first = Integer.parseInt(ipCharStr[0]);
-                int second = Integer.parseInt(ipCharStr[1]);
-                count = judgeIp(first, second, count);
-            } else {
-                count[5]++;
+            //子网掩码错误
+            if (!maskIsLegal(strArr[1])) {
+                errorNum++;
+                continue;
+            }
+
+            //ip的第2段
+            int ipSecond = getIpSeg(strArr[0], 1);
+
+            //A,B,C,D,E类地址的计数，只需ip的第1段就可以判断
+            if (ipFirst >= 1 && ipFirst <= 126) {
+                ANum++;
+            }
+            if (ipFirst >= 128 && ipFirst <= 191) {
+                BNum++;
+            }
+            if (ipFirst >= 192 && ipFirst <= 223) {
+                CNum++;
+            }
+            if (ipFirst >= 224 && ipFirst <= 239) {
+                DNum++;
+            }
+            if (ipFirst >= 240 && ipFirst <= 255) {
+                ENum++;
+            }
+
+            //私网IP范围是：从10.0.0.0到10.255.255.255   从172.16.0.0到172.31.255.255   从192.168.0.0到192.168.255.255
+            //需要ip的第1段和第2段才能判断私网IP
+            if (ipFirst == 10 || (ipFirst == 172 && ipSecond >= 16 && ipSecond <=31) || (ipFirst == 192 && ipSecond == 168)) {
+                privateNum++;
             }
         }
-
-        System.out.println(count[0] + " " + count[1] + " " + count[2] + " " + count[3] + " " + count[4] + " " + count[5] + " " + count[6]);
+        System.out.println(ANum + " " + BNum + " " + CNum + " " + DNum + " " + ENum + " " + errorNum + " " + privateNum);
     }
 
 
-    //判断地址范围和私网ip
-    public static int[] judgeIp(int first, int second, int[] count) {
-        //判断地址范围
-        if (first >= 1 && first <= 126)
-            count[0]++;
-        else if (first >= 128 && first <= 191)
-            count[1]++;
-        else if (first >= 192 && first <= 223)
-            count[2]++;
-        else if (first >= 224 && first <= 239)
-            count[3]++;
-        else if (first >= 240 && first <= 255)
-            count[4]++;
 
-        //判断私网ip
-        if (first == 192 && second == 168)
-            count[6]++;
-        if (first == 10)
-            count[6]++;
-        if (first == 172) {
-            if (second >= 16 && second <= 31)
-                count[6]++;
+
+
+
+    //ip是否合法，返回true表示合法，返回false表示非法
+    public static boolean ipIsLegal(String ip) {
+        String[] ipArr = ip.split("\\.");
+        if (ipArr.length != 4) {
+            return false;
         }
-        return count;
+        if (Integer.valueOf(ipArr[0]) > 255 || Integer.valueOf(ipArr[1]) > 255 || Integer.valueOf(ipArr[2]) > 255 || Integer.valueOf(ipArr[3]) > 255) {
+            return false;
+        }
+        return true;
     }
 
+    //子网掩码是否合法，返回true表示合法，返回false表示非法
+    public static boolean maskIsLegal(String mask) {
+        String[] maskArr = mask.split("\\.");
+        if (maskArr.length != 4) {
+            return false;
+        }
+        String maskBinary = toBinary(maskArr[0]) + toBinary(maskArr[1]) + toBinary(maskArr[2]) + toBinary(maskArr[3]);
+        if (!maskBinary.matches("[1]{1,}[0]{1,}")) {
+            return false;
+        }
+        return true;
+    }
 
+    //将0-255转成二进制表示格式
+    //输入"1"     返回"00000001"
+    //输入"7"     返回"00000111"
+    //输入"128"   返回"10000000"
+    //输入"192"   返回"11000000"
+    //输入"193"   返回"11000001"
+    public static String toBinary(String num) {
+        String numBinary = Integer.toBinaryString(Integer.valueOf(num));
+        while (numBinary.length() < 8) {
+            numBinary = "0" + numBinary;
+        }
+        return numBinary;
+    }
+
+    //获取ip的第index段
+    //输入ip=128.64.32.16     index=0    返回128
+    //输入ip=128.64.32.16     index=1    返回64
+    //输入ip=128.64.32.16     index=2    返回32
+    //输入ip=128.64.32.16     index=3    返回16
+    public static int getIpSeg(String ip, int index) {
+        String[] ipArr = ip.split("\\.");
+        return Integer.valueOf(ipArr[index]);
+    }
 
 }

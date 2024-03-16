@@ -46,4 +46,35 @@ public class 提取不重复的整数 {
         }
     }
 
+
+    //算法1，当作字符串处理
+    public String function1(String string) {
+        String resultString = "";
+
+        for (int i=string.length()-1; i>=0; i--) {
+            if (!resultString.contains(string.substring(i, i+1))) {
+                resultString = resultString + string.substring(i, i+1);
+            }
+        }
+
+        return resultString;
+    }
+
+
+    //算法2，当作数值处理
+    public Integer function2(Integer num) {
+        Set<Integer> set = new HashSet<>();
+        int result = 0;
+        while (num > 0) {
+            int tmp = num % 10;
+            if (!set.contains(tmp)) {
+                result = result * 10 + tmp;
+                set.add(tmp);
+            }
+            num = num /10;
+        }
+
+        return result;
+    }
+
 }

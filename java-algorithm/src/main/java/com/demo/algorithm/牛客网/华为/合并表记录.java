@@ -37,21 +37,20 @@ public class 合并表记录 {
     // TreeMap 红黑树实现，遍历是按照key升序
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
-        while (sc.hasNext()) {
-            int next = sc.nextInt();
-            TreeMap<Integer,Integer> treeMap = new TreeMap<>();
-            for (int i = 0; i < next; i++) {
-                int key = sc.nextInt();
-                int value = sc.nextInt();
-                if (treeMap.containsKey(key)){
-                    treeMap.put(key, treeMap.get(key)+value);
-                } else {
-                    treeMap.put(key,value);
-                }
-            }
-            for (Map.Entry<Integer, Integer> integerIntegerEntry : treeMap.entrySet()) {
-                System.out.println(integerIntegerEntry.getKey() + " " + integerIntegerEntry.getValue());
-            }
+
+        int num = sc.nextInt();
+        int count = 1;
+
+        Map<Integer, Integer> map = new TreeMap<>();
+        while (count<=num) {
+            Integer index = sc.nextInt();
+            Integer value = sc.nextInt();
+            map.put(index, map.getOrDefault(index,0) + value);
+            count++;
+        }
+
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + " " + entry.getValue());
         }
     }
 

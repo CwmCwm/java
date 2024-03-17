@@ -36,8 +36,8 @@ public class 面试20240311 {
 
     }
 
-    //动态规划，TODO，总是看不懂
-    //重后面遍历，递归
+    //动态规划，
+    //从后面遍历，递归
     public static int rec_opt(int[] yuYue, int i) {
         //递归终止的条件,意味着如果只能选第一个,那么最好的方法就是yuYue[0]
         if (i==0) {

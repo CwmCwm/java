@@ -52,8 +52,8 @@ public class ThreadWaitAndNotifyMain {
         public synchronized String getTask() throws InterruptedException {
             while (this.queue.isEmpty()) {
                 System.out.println("队列为空，当前线程" + Thread.currentThread().getName() + "----进入阻塞");
-                //this.wait();
-                this.wait(10000);//该线程超过10000毫秒就不再阻塞，而是重新就绪
+                //this.wait();//该线程阻塞，直到其他线程唤醒notify()或notifyAll()
+                this.wait(10000);//该线程超过10000毫秒就不再阻塞，而是重新就绪，就不需要其他线程唤醒了
             }
             return this.queue.remove();
         }
@@ -109,7 +109,7 @@ public class ThreadWaitAndNotifyMain {
         bThread.setName("bThread");
         bThread.taskQueue = taskQueue;
         bThread.start();
-        Thread.sleep(20000);
+        Thread.sleep(1000);
         aThread.start();
     }
 

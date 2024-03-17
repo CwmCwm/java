@@ -81,7 +81,7 @@ public class ReentrantLockMain {
         }
     }
 
-    //
+    //上面A线程和B线程获取锁的顺序会导致死锁，为了解决死锁，请限制锁的获取顺序
     public static void main(String[] args) {
         AThread aThread = new AThread();
         BThread bThread = new BThread();
